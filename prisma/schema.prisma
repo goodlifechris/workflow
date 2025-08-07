@@ -6,21 +6,12 @@
 
 generator client {
   provider = "prisma-client-js"
-  // output   = "../src/generated/prisma"
-  output   = "../node_modules/.prisma/client" 
-
+  output   = "../node_modules/.prisma/client"
 }
 
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
-}
-model Session {
-  id           String   @id @default(cuid())
-  sessionToken String   @unique
-  userId       String
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  expires      DateTime
 }
 
 model User {
@@ -32,6 +23,11 @@ model User {
   image         String?
   sessions      Session[]
   accounts      Account[]
+  workflows     Workflow[]
+  
+  // Timestamps for tracking
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 }
 
 model Account {
@@ -40,15 +36,90 @@ model Account {
   type               String
   provider           String
   providerAccountId  String
-  refresh_token      String?
-  access_token       String?
+  refresh_token      String?  @db.Text
+  access_token       String?  @db.Text
   expires_at         Int?
   token_type         String?
   scope              String?
-  id_token           String?
+  id_token           String?  @db.Text
   session_state      String?
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
+  
+  user               User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
   @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expires      DateTime
+}
+
+model Workflow {
+  id        String   @id @default(uuid())
+  name      String
+  description String?
+  
+  // User relationship
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  // Workflow components
+  nodes     Node[]
+  edges     Edge[]
+  
+  // Status tracking
+  isActive  Boolean  @default(false)
+  lastRunAt DateTime?
+  
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  // Indexes for better query performance
+  @@index([userId])
+  @@index([createdAt])
+}
+
+model Node {
+  id        String   @id @default(uuid())
+  type      NodeType
+  positionX Float
+  positionY Float
+  data      Json
+  
+  // Workflow relationship
+  workflow    Workflow @relation(fields: [workflowId], references: [id], onDelete: Cascade)
+  workflowId  String
+  
+  // Timestamps
+  createdAt DateTime @default(now())
+  
+  // Index for workflow queries
+  @@index([workflowId])
+}
+
+model Edge {
+  id        String   @id @default(uuid())
+  source    String
+  target    String
+  label     String?
+  
+  // Workflow relationship
+  workflow    Workflow @relation(fields: [workflowId], references: [id], onDelete: Cascade)
+  workflowId  String
+  
+  // Index for workflow queries
+  @@index([workflowId])
+}
+
+enum NodeType {
+  START
+  CONDITION
+  DELAY
+  WEBHOOK
+  LOGGER
+  END
 }

@@ -34,3 +34,130 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+
+# Workflow Builder
+
+Workflow Builder is a full-stack application for creating and managing dynamic workflows visually. This README provides setup instructions for local development, Docker usage, and deployment.
+
+## Features
+
+- Visual workflow builder
+- Auth system (NextAuth.js)
+- PostgreSQL + Prisma ORM
+- CI/CD via GitHub Actions
+- Dockerized for production
+
+---
+
+## 🚀 Getting Started Locally
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/your-username/workflow-builder.git
+cd workflow-builder
+```
+
+### 2. Create environment variables
+
+Create a `.env` file in the root directory and add the following:
+
+```env
+DATABASE_URL=postgresql://postgres:postgres@localhost:5432/workflow-builder?schema=public
+NEXTAUTH_URL=http://localhost:3000
+NEXTAUTH_SECRET=your-secret-key-here
+```
+
+### 3. Install dependencies
+
+```bash
+npm install
+```
+
+### 4. Run the development server
+
+```bash
+npm run dev
+```
+
+Access the app at `http://localhost:3000`.
+
+## 🐳 Run postgres with Docker
+
+### 1. Build and start container
+
+```bash
+docker-compose up db --build
+```
+---
+
+## 🐳 Run all with Docker
+
+### 1. Build and start containers
+
+```bash
+docker-compose up --build
+```
+
+### 2. Access the app
+
+- Web App: [http://localhost:3000](http://localhost:3000)
+- PostgreSQL: running on port `5432`
+
+---
+
+## ✅ CI/CD
+
+This project uses GitHub Actions for CI/CD. On every push to the `main` branch:
+
+- Linting, testing, and Prisma migration are run
+- Future: automatic deploy to production via Docker (e.g., Railway or Render)
+
+---
+
+## 🌐 Deployment
+
+To deploy both app and database:
+
+### Option 1: [Railway](https://railway.app)
+
+1. Link your GitHub repo
+2. Add the required environment variables
+3. Deploy using Railway’s Dockerfile support
+
+### Option 2: [Render](https://render.com)
+
+1. Create a Web Service and connect your GitHub repo
+2. Set build command to: `docker-compose up --build`
+3. Add environment variables (see `.env`)
+4. Deploy and monitor
+
+---
+
+## 🧪 Running Tests
+
+```bash
+npm run test
+```
+
+Make sure your PostgreSQL database is running before running tests.
+
+---
+
+## 🛠 Tech Stack
+
+- Next.js
+- TypeScript
+- Prisma + PostgreSQL
+- Tailwind CSS
+- Docker
+- GitHub Actions
+
+---
+
+## 📄 License
+
+MIT
+
+
