@@ -26,7 +26,7 @@ jobs:
           --health-retries 5
 
     env:
-      DATABASE_URL="postgresql://postgres:postgres@localhost:5432/workflow-builder?schema=public"
+      DATABASE_URL=postgresql://postgres:postgres@localhost:5432/workflow-builder?schema=public
       NEXTAUTH_SECRET: your-secret-key-here
       NEXTAUTH_URL: http://localhost:3000
 
