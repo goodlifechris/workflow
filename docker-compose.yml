@@ -1,34 +1,52 @@
-version: '3.8'
+name: CI/CD Pipeline
 
-services:
-  app:
-    build: .
-    ports:
-      - "3000:3000"
-    environment:
-      - DATABASE_URL=postgresql://postgres:postgres@db:5432/workflow-builder?schema=public
-      - NEXTAUTH_SECRET=your-secret-key-here
-      - NEXTAUTH_URL=http://localhost:3000
-    depends_on:
-      - db
-    volumes:
-      - .:/app
-      - /app/node_modules
-    command: >
-      sh -c "npx prisma migrate deploy && 
-             npx prisma db seed && 
-             npm run dev"
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
 
-  db:
-    image: postgres:15
-    ports:
-      - "5432:5432"
-    environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=workflow-builder
-    volumes:
-      - postgres-data:/var/lib/postgresql/data
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
 
-volumes:
-  postgres-data:
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: testdb
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    env:
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/workflow-builder?schema=public
+      NEXTAUTH_SECRET: your-secret-key-here
+      NEXTAUTH_URL: http://localhost:3000
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Generate Prisma Client
+        run: npx prisma generate
+
+      - name: Run Prisma Migrations
+        run: npx prisma migrate deploy
+
+      - name: Run Tests
+        run: npm run test
