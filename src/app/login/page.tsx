@@ -12,6 +12,7 @@ import { useRouter } from 'next/navigation'
 import {  signIn } from 'next-auth/react'
 import {toast } from 'sonner'
 import Header from '@/components/ui/header'
+import Link from 'next/link'
 
 const FormSchema = z.object({
   email: z.string().email('Invalid email address'),
@@ -96,6 +97,13 @@ export default function LoginPage() {
               <Button type="submit" className="w-full">
                 Sign In
               </Button>
+              <div className="mt-4 text-center text-sm">
+            Don&apos;t have an Account?{' '}
+            <a href="/signup" className="text-blue-600 hover:underline">
+              Sign up
+            </a>
+          </div>
+      
             </form>
           </Form>
         </CardContent>
