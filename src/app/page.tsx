@@ -19,7 +19,7 @@ export default async function LandingPage() {
     redirect("/dashboard");
   }
   // Redirect to login if not logged in
-  redirect("/login");
+
 
   // Redirect to login if not logged in
   return (
