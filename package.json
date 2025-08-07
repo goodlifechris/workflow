@@ -12,7 +12,9 @@
     "prisma:generate": "prisma generate",
     "prisma:reset": "prisma migrate reset",
     "seed": "ts-node --project tsconfig.seed.json prisma/seed-user.ts",
-    "prisma:seed": "npm run prisma:generate && npm run seed"
+    "prisma:seed": "npm run prisma:generate && npm run seed",
+    "test": "jest"
+
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.10.0",
