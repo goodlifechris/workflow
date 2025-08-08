@@ -116,24 +116,7 @@ This project uses GitHub Actions for CI/CD. On every push to the `main` branch:
 
 ---
 
-## 🌐 Deployment
 
-To deploy both app and database:
-
-### Option 1: [Railway](https://railway.app)
-
-1. Link your GitHub repo
-2. Add the required environment variables
-3. Deploy using Railway’s Dockerfile support
-
-### Option 2: [Render](https://render.com)
-
-1. Create a Web Service and connect your GitHub repo
-2. Set build command to: `docker-compose up --build`
-3. Add environment variables (see `.env`)
-4. Deploy and monitor
-
----
 
 ## 🧪 Running Tests
 
