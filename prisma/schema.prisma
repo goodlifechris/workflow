@@ -106,7 +106,8 @@ model Edge {
   source    String
   target    String
   label     String?
-  
+  sourceHandle String?  // Add this line
+  targetHandle String?  // Add this line
   // Workflow relationship
   workflow    Workflow @relation(fields: [workflowId], references: [id], onDelete: Cascade)
   workflowId  String

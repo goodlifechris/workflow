@@ -1,4 +1,3 @@
-/* eslint-disable @next/next/no-async-client-component */
 import { Button } from "@/components/ui/button";
 import Header from "@/components/ui/header";
 import { authOptions } from "@/lib/auth";
