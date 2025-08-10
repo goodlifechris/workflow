@@ -3,11 +3,12 @@ import prisma  from '@/lib/prisma';
 import { notFound } from 'next/navigation';
 import StatCard from '@/components/dashboard/StartCard';
 import WorkflowCard from '@/components/dashboard/WorkFlowCard';
-import { FolderOpen, PlusIcon } from 'lucide-react';
+import { ChevronDown, FolderOpen, PlusIcon } from 'lucide-react';
 import { Activity } from 'lucide-react';
 import { getCurrentUser } from '@/lib/session';
 import { LayoutTemplate } from 'lucide-react';
 import Link from 'next/link';
+import { signOut } from 'next-auth/react';
 
 export default async function Dashboard() {
   const user = await getCurrentUser();
@@ -57,9 +58,69 @@ const totalNodes = workflowsWithNodes.reduce(
 
   return (
     <div className="p-6">
-      <h1 className="text-2xl font-bold mb-6">Dashboard</h1>
+      <div className="flex flex-col ">
+<div className="p-4 border-b">
+  {/* Top row with breadcrumbs and user menu */}
+  <div className="flex items-center justify-between mb-4">
+    {/* Breadcrumbs */}
+    <nav className="flex" aria-label="Breadcrumb">
+      <ol className="inline-flex items-center space-x-2">
+        <li>
+          <Link
+            href="/dashboard"
+            className="text-sm font-medium text-gray-500 hover:text-gray-700"
+          >
+            Dashboard
+          </Link>
+        </li>
+        <li>
+          <span className="text-gray-400">/</span>
+        </li>
+        <li>
+          <Link
+            href="/workflows"
+            className="text-sm font-medium text-gray-500 hover:text-gray-700"
+          >
+            All Workflows
+          </Link>
+        </li>
+        <li>
+          <span className="text-gray-400">/</span>
+        </li>
+   
+      </ol>
+    </nav>
+
+    {/* User avatar and dropdown */}
+    <div className="relative">
+      <button
+        className="flex items-center space-x-2 focus:outline-none"
+      >
+        <div className="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center">
+          <span className="text-sm font-medium text-gray-700">
+            {user?.name?.charAt(0).toUpperCase() || "U"}
+          </span>
+        </div>
+        <ChevronDown className="h-4 w-4 text-gray-500" />
+      </button>
+
+      {/* Dropdown menu */}
+        <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-10">
+          {/* <button
+            onClick={() => signOut()}
+            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
+          >
+            Sign out
+          </button> */}
+        </div>
+    </div>
+  </div>
+  </div>
+
+  </div>
+      {/* <h1 className="text-2xl font-bold mb-6">Dashboard</h1> */}
       
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8 mb-8">
       <StatCard 
           title="Total Workflows" 
           value={workflowCount} 

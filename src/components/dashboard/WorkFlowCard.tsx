@@ -4,6 +4,8 @@ import { Workflow } from '@prisma/client';
 import { formatDate } from '@/lib/utils';
 import { Activity, Network, Eye, Edit, Trash2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
+import { useState } from 'react';
 
 interface WorkflowCardProps {
   workflow: Workflow & { nodes: { id: string }[]; id: string };
@@ -12,7 +14,37 @@ interface WorkflowCardProps {
 
 export default function WorkflowCard({ workflow, nodeCount }: WorkflowCardProps) {
   const router = useRouter();
+  const [isDeleting, setIsDeleting] = useState(false);
 
+  const handleDelete = async () => {
+    if (!confirm('Are you sure you want to delete this workflow? This action cannot be undone.')) {
+      return;
+    }
+
+    setIsDeleting(true);
+    
+    try {
+      const response = await fetch(`/api/workflows/${workflow.id}`, {
+        method: 'DELETE',
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to delete workflow');
+      }
+
+      toast.success('Workflow deleted successfully');
+      
+ 
+      // Option 2: Refresh the page
+      router.refresh();
+      
+    } catch (error) {
+      console.error('Error deleting workflow:', error);
+      toast.error('Failed to delete workflow');
+    } finally {
+      setIsDeleting(false);
+    }
+  };
   const handleAction = (e: React.MouseEvent, action: 'view' | 'edit' | 'delete') => {
     e.preventDefault();
     e.stopPropagation();
@@ -22,7 +54,7 @@ export default function WorkflowCard({ workflow, nodeCount }: WorkflowCardProps)
     } else if (action === 'edit') {
       router.push(`/workflows/${workflow.id}/edit`);
     } else if (action === 'delete') {
-      // Implement delete logic here or call a passed onDelete prop
+      handleDelete();
       console.log('Delete workflow', workflow.id);
     }
   };

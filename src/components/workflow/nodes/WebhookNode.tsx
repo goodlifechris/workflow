@@ -38,7 +38,8 @@ export function WebhookNode({ id, data, selected }: WebhookNodeProps) {
   const testWebhook = async () => {
     setIsTesting(true)
     try {
-      const response = await fetch('/api/test-webhook', {
+      
+      const response = await fetch('/api/test_webhook', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -50,8 +51,9 @@ export function WebhookNode({ id, data, selected }: WebhookNodeProps) {
           body: method === 'POST' ? body : undefined
         })
       })
-      
+
       const status = response.status
+      console.log(status)
       setLastStatus(status)
       updateNodeData(nodeId!, { 
         url,

@@ -22,7 +22,41 @@ export default async function WorkflowsPage() {
 
   return (
     <div className="p-6">
+              <div className="p-4 border-b">
+        {/* Top row with breadcrumbs and user menu */}
+        <div className="flex items-center justify-between mb-4">
+          {/* Breadcrumbs */}
+          <nav className="flex" aria-label="Breadcrumb">
+            <ol className="inline-flex items-center space-x-2">
+              <li>
+                <Link
+                  href="/dashboard"
+                  className="text-sm font-medium text-gray-500 hover:text-gray-700"
+                >
+                  Dashboard
+                </Link>
+              </li>
+              <li>
+                <span className="text-gray-400">/</span>
+              </li>
+              <li>
+                <Link
+                  href="/workflows"
+                  className="text-sm font-medium text-gray-500 hover:text-gray-700"
+                >
+                  All Workflows
+                </Link>
+              </li>
+              <li>
+                <span className="text-gray-400">/</span>
+              </li>
+       
+            </ol>
+          </nav>
+          </div>
+          </div>
       <div className="flex justify-between items-center mb-6">
+
         <h1 className="text-2xl font-bold">All Workflows</h1>
         <Link
           href="/workflows/new"

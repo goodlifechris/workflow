@@ -6,6 +6,7 @@ import '@xyflow/react/dist/style.css'
 import { StartNode, ConditionNode, DelayNode, WebhookNode, LoggerNode, EndNode } from '@/components/workflow/nodes'
 import { useEffect, useState } from 'react'
 import type { WorkflowNode, WorkflowEdge } from '@/types/workflow'
+import Link from 'next/link'
 
 const nodeTypes = {
   start: StartNode,
@@ -60,9 +61,46 @@ export default function WorkflowViewPage() {
 
   return (
     <div className="flex flex-col h-[calc(100vh-64px)]">
-      <div className="p-4 border-b">
+        <div className="p-4 border-b">
+        {/* Top row with breadcrumbs and user menu */}
+        <div className="flex items-center justify-between mb-4">
+          {/* Breadcrumbs */}
+          <nav className="flex" aria-label="Breadcrumb">
+            <ol className="inline-flex items-center space-x-2">
+              <li>
+                <Link
+                  href="/dashboard"
+                  className="text-sm font-medium text-gray-500 hover:text-gray-700"
+                >
+                  Dashboard
+                </Link>
+              </li>
+              <li>
+                <span className="text-gray-400">/</span>
+              </li>
+              <li>
+                <Link
+                  href="/workflows"
+                  className="text-sm font-medium text-gray-500 hover:text-gray-700"
+                >
+                  All Workflows
+                </Link>
+              </li>
+              <li>
+                <span className="text-gray-400">/</span>
+              </li>
+              <li>
+                <span className="text-sm font-medium text-gray-700 truncate max-w-xs">
+                  {workflowName || "Untitled Workflow"}
+                </span>
+              </li>
+            </ol>
+          </nav>
+          </div>
+          </div>
+      {/* <div className="p-4 border-b">
         <h1 className="text-2xl font-bold">{workflowName}</h1>
-      </div>
+      </div> */}
       
       <div className="flex-1">
         <ReactFlow
